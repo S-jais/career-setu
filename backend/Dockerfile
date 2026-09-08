@@ -5,12 +5,14 @@ FROM maven:3.9.9-eclipse-temurin-21-alpine AS builder
 
 WORKDIR /build
 
-# Cache Maven dependencies layer
-COPY pom.xml .
-RUN mvn dependency:go-offline -B || true
+# Memory-optimized Maven configuration for cloud build environments
+ENV MAVEN_OPTS="-Xmx384m -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
 
-# Copy source code and build the production jar
+# Copy pom and source code
+COPY pom.xml .
 COPY src ./src
+
+# Build production jar
 RUN mvn clean package -DskipTests -B
 
 # ============================================================
@@ -18,10 +20,10 @@ RUN mvn clean package -DskipTests -B
 # ============================================================
 FROM eclipse-temurin:21-jre-alpine
 
-# Install curl for Render healthcheck probes
+# Install curl and tzdata
 RUN apk add --no-cache curl tzdata
 
-# Create dedicated non-root application user
+# Create non-root application user
 RUN addgroup -S careersetu && adduser -S careersetu -G careersetu
 
 WORKDIR /app
@@ -34,16 +36,12 @@ RUN chown -R careersetu:careersetu /app
 
 USER careersetu
 
-# Render sets the PORT environment variable dynamically (defaults to 8080)
-ENV PORT=8080
+# Render injects PORT dynamically (defaults to 10000 on Render)
+ENV PORT=10000
 ENV SPRING_PROFILES_ACTIVE=render
 ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom"
 
-EXPOSE 8080
-
-# Health check configuration for container orchestrators
-HEALTHCHECK --interval=30s --timeout=5s --start-period=45s --retries=3 \
-  CMD curl -f http://localhost:${PORT}/actuator/health || exit 1
+EXPOSE 10000
 
 # Execute Spring Boot application
 ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]

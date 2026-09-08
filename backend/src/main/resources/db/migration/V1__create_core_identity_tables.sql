@@ -2,10 +2,12 @@
 -- CareerSetu — V1: Core Identity & RBAC Tables
 -- ============================================================
 
--- Enable extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-CREATE EXTENSION IF NOT EXISTS "pgcrypto";
-CREATE EXTENSION IF NOT EXISTS vector;
+-- PostgreSQL 13+ has native gen_random_uuid() built into the core engine.
+-- Creating a compatibility uuid_generate_v4() function mapping to gen_random_uuid()
+-- ensures full compatibility without requiring superuser CREATE EXTENSION privileges.
+CREATE OR REPLACE FUNCTION uuid_generate_v4() RETURNS uuid AS $$
+    SELECT gen_random_uuid();
+$$ LANGUAGE sql;
 
 -- ── User Roles Enum ─────────────────────────────────────────
 CREATE TYPE user_role AS ENUM (

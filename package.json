@@ -1,0 +1,16 @@
+{
+  "name": "careersetu",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CareerSetu — India-First AI Career & Academia-Industry Collaboration Platform",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:ai": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"cd ai-service; .\\venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload\"",
+    "dev:backend": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"cd backend; & 'C:\\Users\\siddhartha jaiswal\\.maven\\maven-3.9.15\\bin\\mvn.cmd' spring-boot:run '-Dspring-boot.run.profiles=local'\"",
+    "dev:all": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\start-all.ps1",
+    "start": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\start-all.ps1",
+    "build": "npm --prefix frontend run build",
+    "lint": "npm --prefix frontend run lint"
+  }
+}

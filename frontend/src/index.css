@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+/* ─── Design Tokens ────────────────────────────────────────── */
+:root {
+  /* Brand Colors — Saffron-teal-indigo palette (India-inspired, not clichéd) */
+  --color-brand-50: hsl(224, 100%, 97%);
+  --color-brand-100: hsl(224, 95%, 93%);
+  --color-brand-200: hsl(224, 90%, 85%);
+  --color-brand-300: hsl(224, 85%, 75%);
+  --color-brand-400: hsl(224, 80%, 65%);
+  --color-brand-500: hsl(224, 75%, 55%);   /* Primary */
+  --color-brand-600: hsl(224, 72%, 45%);   /* Primary hover */
+  --color-brand-700: hsl(224, 70%, 36%);
+  --color-brand-800: hsl(224, 68%, 27%);
+  --color-brand-900: hsl(224, 66%, 18%);
+
+  /* Accent — Warm saffron */
+  --color-accent-400: hsl(38, 95%, 58%);
+  --color-accent-500: hsl(38, 92%, 48%);
+  --color-accent-600: hsl(38, 90%, 40%);
+
+  /* Success / Warning / Error */
+  --color-success: hsl(148, 60%, 42%);
+  --color-warning: hsl(38, 95%, 50%);
+  --color-error: hsl(4, 78%, 53%);
+  --color-info: hsl(210, 80%, 50%);
+
+  /* Neutrals */
+  --color-gray-50: hsl(210, 20%, 98%);
+  --color-gray-100: hsl(210, 16%, 95%);
+  --color-gray-200: hsl(210, 14%, 89%);
+  --color-gray-300: hsl(210, 12%, 80%);
+  --color-gray-400: hsl(210, 10%, 65%);
+  --color-gray-500: hsl(210, 8%, 50%);
+  --color-gray-600: hsl(210, 10%, 38%);
+  --color-gray-700: hsl(210, 12%, 27%);
+  --color-gray-800: hsl(210, 14%, 18%);
+  --color-gray-900: hsl(210, 16%, 10%);
+  --color-gray-950: hsl(210, 20%, 6%);
+
+  /* Surfaces (light mode) */
+  --surface-base: hsl(210, 20%, 98%);
+  --surface-card: hsl(0, 0%, 100%);
+  --surface-overlay: rgba(255, 255, 255, 0.85);
+  --surface-inset: hsl(210, 16%, 95%);
+
+  /* Text */
+  --text-primary: hsl(210, 16%, 10%);
+  --text-secondary: hsl(210, 10%, 38%);
+  --text-muted: hsl(210, 8%, 55%);
+  --text-inverse: hsl(0, 0%, 100%);
+
+  /* Border */
+  --border-light: hsl(210, 14%, 89%);
+  --border-default: hsl(210, 12%, 80%);
+  --border-strong: hsl(210, 10%, 65%);
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.07), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 40px rgba(76, 110, 219, 0.15);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Transitions */
+  --transition-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark mode tokens */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-base: hsl(222, 20%, 8%);
+    --surface-card: hsl(222, 18%, 11%);
+    --surface-overlay: rgba(20, 22, 32, 0.85);
+    --surface-inset: hsl(222, 16%, 14%);
+    --text-primary: hsl(210, 20%, 94%);
+    --text-secondary: hsl(210, 10%, 65%);
+    --text-muted: hsl(210, 8%, 48%);
+    --border-light: hsl(222, 14%, 18%);
+    --border-default: hsl(222, 12%, 22%);
+    --border-strong: hsl(222, 10%, 35%);
+  }
+}
+
+[data-theme="dark"] {
+  --surface-base: hsl(222, 20%, 8%);
+  --surface-card: hsl(222, 18%, 11%);
+  --surface-overlay: rgba(20, 22, 32, 0.85);
+  --surface-inset: hsl(222, 16%, 14%);
+  --text-primary: hsl(210, 20%, 94%);
+  --text-secondary: hsl(210, 10%, 65%);
+  --text-muted: hsl(210, 8%, 48%);
+  --border-light: hsl(222, 14%, 18%);
+  --border-default: hsl(222, 12%, 22%);
+  --border-strong: hsl(222, 10%, 35%);
+}
+
+/* ─── Base Reset ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--surface-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Tailwind CSS v4 Theme ────────────────────────────────── */
+@theme {
+  --font-family-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-family-display: 'Outfit', 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --color-brand-50: hsl(224, 100%, 97%);
+  --color-brand-100: hsl(224, 95%, 93%);
+  --color-brand-200: hsl(224, 90%, 85%);
+  --color-brand-300: hsl(224, 85%, 75%);
+  --color-brand-400: hsl(224, 80%, 65%);
+  --color-brand-500: hsl(224, 75%, 55%);
+  --color-brand-600: hsl(224, 72%, 45%);
+  --color-brand-700: hsl(224, 70%, 36%);
+  --color-brand-800: hsl(224, 68%, 27%);
+  --color-brand-900: hsl(224, 66%, 18%);
+
+  --color-accent-400: hsl(38, 95%, 58%);
+  --color-accent-500: hsl(38, 92%, 48%);
+  --color-accent-600: hsl(38, 90%, 40%);
+}
+
+/* ─── Utility Classes ───────────────────────────────────────── */
+.font-display { font-family: var(--font-display); }
+.font-sans { font-family: var(--font-sans); }
+
+.gradient-brand {
+  background: linear-gradient(135deg, hsl(224, 75%, 55%) 0%, hsl(224, 72%, 45%) 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(
+    135deg,
+    hsl(224, 75%, 55%) 0%,
+    hsl(262, 72%, 52%) 50%,
+    hsl(224, 72%, 45%) 100%
+  );
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, hsl(224, 75%, 55%), hsl(38, 92%, 48%));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glass {
+  background: var(--surface-overlay);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-light);
+}
+
+.card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-base);
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* ─── Focus Styles (Accessibility) ─────────────────────────── */
+:focus-visible {
+  outline: 2px solid hsl(224, 75%, 55%);
+  outline-offset: 2px;
+}
+
+/* ─── Selection ─────────────────────────────────────────────── */
+::selection {
+  background-color: hsl(224, 75%, 55%);
+  color: white;
+}
+
+/* ─── Animation Utilities ───────────────────────────────────── */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76, 110, 219, 0.2); }
+  50%       { box-shadow: 0 0 0 8px rgba(76, 110, 219, 0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in { animation: fade-in 0.4s ease-out forwards; }
+.animate-slide-up { animation: slide-up 0.5s ease-out forwards; }
+
+/* ─── Reduced motion ────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ─── AI Assistant ──────────────────────────────────────────── */
+
+@keyframes ai-orb-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+
+@keyframes ai-orb-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(76, 110, 219, 0.3), 0 4px 14px rgba(76, 110, 219, 0.2); }
+  50%      { box-shadow: 0 0 0 8px rgba(76, 110, 219, 0), 0 4px 14px rgba(76, 110, 219, 0.3); }
+}
+
+@keyframes ai-orb-ring {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes ai-dot-bounce {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40%           { transform: scale(1); opacity: 1; }
+}
+
+.ai-orb {
+  animation: ai-orb-pulse 3s ease-in-out infinite, ai-orb-glow 3s ease-in-out infinite;
+}
+
+.ai-orb:hover {
+  animation: none;
+  transform: scale(1.1);
+  box-shadow: 0 0 0 6px rgba(76, 110, 219, 0.15), 0 8px 24px rgba(76, 110, 219, 0.3);
+}
+
+.ai-orb--thinking {
+  animation: ai-orb-pulse 1s ease-in-out infinite, ai-orb-glow 1s ease-in-out infinite;
+}
+
+.ai-thinking-dots span {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-brand-400);
+  animation: ai-dot-bounce 1.2s infinite ease-in-out;
+}
+.ai-thinking-dots span:nth-child(1) { animation-delay: 0s; }
+.ai-thinking-dots span:nth-child(2) { animation-delay: 0.15s; }
+.ai-thinking-dots span:nth-child(3) { animation-delay: 0.3s; }
+
+/* AI message markdown rendering */
+.ai-markdown p { margin-bottom: 0.5em; }
+.ai-markdown p:last-child { margin-bottom: 0; }
+.ai-markdown strong { font-weight: 600; color: var(--text-primary); }
+.ai-markdown ul, .ai-markdown ol { padding-left: 1.25em; margin: 0.4em 0; }
+.ai-markdown li { margin: 0.15em 0; }
+.ai-markdown code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.85em;
+  padding: 0.15em 0.35em;
+  border-radius: 4px;
+  background: var(--surface-inset);
+}
+

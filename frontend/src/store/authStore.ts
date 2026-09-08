@@ -12,14 +12,23 @@ export interface User {
   profilePictureUrl?: string
 }
 
+export const SUPER_ADMIN_EMAILS = ['sj6161362@gmail.com', 'admin@careersetu.in']
+
+export const isSuperAdminEmail = (email?: string | null): boolean => {
+  if (!email) return false
+  return SUPER_ADMIN_EMAILS.includes(email.toLowerCase().trim())
+}
+
 interface AuthState {
   isAuthenticated: boolean
   user: User | null
   accessToken: string | null
   refreshToken: string | null
+  activeRoleView?: string | null
   setAuth: (user: User, accessToken: string, refreshToken: string) => void
   clearAuth: () => void
   updateUser: (partial: Partial<User>) => void
+  setActiveRoleView: (role: string | null) => void
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -29,24 +38,42 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       accessToken: null,
       refreshToken: null,
-      setAuth: (user, accessToken, refreshToken) =>
-        set({ isAuthenticated: true, user, accessToken, refreshToken }),
+      activeRoleView: null,
+      setAuth: (user, accessToken, refreshToken) => {
+        const isAdmin = isSuperAdminEmail(user.email)
+        const enrichedUser: User = isAdmin
+          ? {
+              ...user,
+              primaryRole: 'PLATFORM_ADMIN',
+              roles: Array.from(new Set([...(user.roles || []), 'PLATFORM_ADMIN', 'SUPER_ADMIN', 'STUDENT', 'EMPLOYER', 'INSTITUTION_ADMIN'])),
+            }
+          : user
+        set({ isAuthenticated: true, user: enrichedUser, accessToken, refreshToken, activeRoleView: null })
+      },
       clearAuth: () =>
-        set({ isAuthenticated: false, user: null, accessToken: null, refreshToken: null }),
+        set({ isAuthenticated: false, user: null, accessToken: null, refreshToken: null, activeRoleView: null }),
       updateUser: (partial) =>
         set((state) => ({
           user: state.user ? { ...state.user, ...partial } : null,
         })),
+      setActiveRoleView: (role) =>
+        set({ activeRoleView: role }),
     }),
     {
       name: 'careersetu-auth',
-      // Only persist these keys — never the access token in production
-      // For demo: we persist tokens. Production: use HttpOnly cookies
+      onRehydrateStorage: () => (state) => {
+        // Auto-elevate super admin if already logged in or stored
+        if (state?.user && isSuperAdminEmail(state.user.email)) {
+          state.user.primaryRole = 'PLATFORM_ADMIN'
+          state.user.roles = Array.from(new Set([...(state.user.roles || []), 'PLATFORM_ADMIN', 'SUPER_ADMIN', 'STUDENT', 'EMPLOYER', 'INSTITUTION_ADMIN']))
+        }
+      },
       partialize: (state) => ({
         isAuthenticated: state.isAuthenticated,
         user: state.user,
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
+        activeRoleView: state.activeRoleView,
       }),
     }
   )

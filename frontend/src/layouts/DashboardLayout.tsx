@@ -47,6 +47,15 @@ const navConfig: Record<string, NavItem[]> = {
     { label: 'Student Roster', href: '/institution/students', icon: GraduationCap },
     { label: 'Placement Drives', href: '/institution/drives', icon: TrendingUp },
   ],
+  admin: [
+    { label: 'Command Center', href: '/admin/overview', icon: Shield, badge: 'ADMIN' },
+    { label: 'Student Directory', href: '/institution/students', icon: GraduationCap },
+    { label: 'Opportunities & Jobs', href: '/employer/jobs', icon: Briefcase },
+    { label: 'Applicant ATS', href: '/employer/applicants', icon: Users, badge: 12 },
+    { label: 'Digital Twin AI', href: '/student/digital-twin', icon: Sparkles, badge: 'NEW' },
+    { label: 'System Analytics', href: '/employer/analytics', icon: BarChart3 },
+    { label: 'AI Copilot', href: '/student/copilot', icon: Brain },
+  ],
 }
 
 export default function DashboardLayout({ role = 'student' }: { role?: string }) {
@@ -54,11 +63,13 @@ export default function DashboardLayout({ role = 'student' }: { role?: string })
   const [notifOpen, setNotifOpen] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
-  const { user, clearAuth } = useAuthStore()
+  const { user, clearAuth, activeRoleView, setActiveRoleView } = useAuthStore()
   const { notifications, unreadCount, markAsRead, markAllAsRead, dismissNotification } = useNotificationStore()
   const unread = unreadCount()
 
-  const navItems = navConfig[role] || navConfig.student
+  const isAdmin = user?.primaryRole === 'PLATFORM_ADMIN' || user?.primaryRole === 'SUPER_ADMIN' || user?.roles?.includes('PLATFORM_ADMIN')
+  const effectiveRole = isAdmin && activeRoleView ? activeRoleView : (isAdmin && role === 'student' && location.pathname.startsWith('/admin') ? 'admin' : role)
+  const navItems = navConfig[effectiveRole] || navConfig[role] || navConfig.student
 
   const handleLogout = () => {
     clearAuth()
@@ -334,12 +345,37 @@ export default function DashboardLayout({ role = 'student' }: { role?: string })
             </AnimatePresence>
           </div>
 
-          {/* User menu */}
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-sm font-bold">
-              {user?.fullName?.charAt(0) || 'U'}
+          {/* User menu & Admin Status */}
+          <div className="flex items-center gap-3">
+            {isAdmin && (
+              <Link
+                to="/admin/overview"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300 dark:border-amber-700/50 hover:bg-amber-200 transition-all shadow-sm"
+              >
+                <Shield className="w-3.5 h-3.5 text-amber-600" />
+                <span>SUPER ADMIN</span>
+              </Link>
+            )}
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-full gradient-brand flex items-center justify-center text-white text-sm font-bold shadow-sm">
+                {user?.fullName?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'S'}
+              </div>
+              <div className="hidden sm:block text-left text-xs">
+                <div className="font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[120px]">
+                  {user?.displayName || user?.fullName || 'Siddhartha Jaiswal'}
+                </div>
+                <div className="text-[10px] text-slate-400 truncate max-w-[120px]">
+                  {user?.email || 'sj6161362@gmail.com'}
+                </div>
+              </div>
             </div>
-            <ChevronDown className="w-3.5 h-3.5" style={{ color: 'var(--text-muted)' }} />
+            <button
+              onClick={handleLogout}
+              className="p-1.5 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-all"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </header>
 

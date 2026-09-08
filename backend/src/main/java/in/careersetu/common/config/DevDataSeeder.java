@@ -100,8 +100,11 @@ public class DevDataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.count() > 0) {
-            log.info("Database already seeded with {} users. Skipping DevDataSeeder.", userRepository.count());
+        // Always ensure super admin account exists and is elevated
+        ensureSuperAdminExists();
+
+        if (userRepository.count() > 3) {
+            log.info("Database already seeded with {} users. Skipping remaining DevDataSeeder.", userRepository.count());
             return;
         }
 
@@ -559,5 +562,47 @@ public class DevDataSeeder implements CommandLineRunner {
         assessmentSubmissionRepository.save(sub1);
 
         log.info("CareerSetu demo data seeding completed successfully! Mentors, Events, Interviews, TPO Cohort, Placement Drives, Notifications, and Assessment Badges initialized.");
+    }
+
+    private void ensureSuperAdminExists() {
+        String adminEmail = "sj6161362@gmail.com";
+        String defaultPasswordHash = passwordEncoder.encode("Demo@CareerSetu2024");
+
+        userRepository.findByEmail(adminEmail).ifPresentOrElse(user -> {
+            boolean updated = false;
+            if (user.getPrimaryRole() != User.UserRole.PLATFORM_ADMIN) {
+                user.setPrimaryRole(User.UserRole.PLATFORM_ADMIN);
+                updated = true;
+            }
+            if (user.getAccountStatus() != User.AccountStatus.ACTIVE) {
+                user.setAccountStatus(User.AccountStatus.ACTIVE);
+                updated = true;
+            }
+            if (!user.isEmailVerified()) {
+                user.setEmailVerified(true);
+                updated = true;
+            }
+            if (updated) {
+                userRepository.save(user);
+                log.info("Elevated existing user {} to PLATFORM_ADMIN", adminEmail);
+            }
+        }, () -> {
+            User superAdmin = User.builder()
+                    .email(adminEmail)
+                    .fullName("Siddhartha Jaiswal")
+                    .displayName("Admin Siddhartha")
+                    .passwordHash(defaultPasswordHash)
+                    .primaryRole(User.UserRole.PLATFORM_ADMIN)
+                    .accountStatus(User.AccountStatus.ACTIVE)
+                    .emailVerified(true)
+                    .mobileVerified(true)
+                    .locale("en")
+                    .timezone("Asia/Kolkata")
+                    .failedLoginCount(0)
+                    .version(0L)
+                    .build();
+            userRepository.save(superAdmin);
+            log.info("Seeded super admin user: {}", adminEmail);
+        });
     }
 }

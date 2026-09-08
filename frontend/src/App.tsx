@@ -28,6 +28,7 @@ import CompanyProfilePage from '@/pages/employer/CompanyProfilePage'
 import StudentDirectory from '@/pages/institution/StudentDirectory'
 import PlacementDrives from '@/pages/institution/PlacementDrives'
 import NotFound from '@/pages/NotFound'
+import AdminDashboard from '@/pages/admin/AdminDashboard'
 
 // Layouts
 import DashboardLayout from '@/layouts/DashboardLayout'
@@ -42,7 +43,10 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode;
     return <Navigate to={`/auth/login${redirectParam}`} replace />
   }
 
-  if (allowedRoles && user && !allowedRoles.includes(user.primaryRole)) {
+  // Super Admin has universal master access across all portals
+  const isAdmin = user?.primaryRole === 'PLATFORM_ADMIN' || user?.primaryRole === 'SUPER_ADMIN' || user?.roles?.includes('PLATFORM_ADMIN')
+
+  if (allowedRoles && user && !isAdmin && !allowedRoles.includes(user.primaryRole)) {
     return <Navigate to="/dashboard" replace />
   }
 
@@ -54,6 +58,9 @@ function DashboardRedirect() {
   if (!user) return <Navigate to="/auth/login" replace />
 
   switch (user.primaryRole) {
+    case 'PLATFORM_ADMIN':
+    case 'SUPER_ADMIN':
+      return <Navigate to="/admin/overview" replace />
     case 'STUDENT':
     case 'ALUMNI':
       return <Navigate to="/student/overview" replace />
@@ -122,6 +129,11 @@ export default function App() {
         <Route path="/institution/overview" element={<InstitutionDashboard />} />
         <Route path="/institution/students" element={<StudentDirectory />} />
         <Route path="/institution/drives" element={<PlacementDrives />} />
+      </Route>
+
+      {/* Admin routes */}
+      <Route element={<ProtectedRoute allowedRoles={['PLATFORM_ADMIN', 'SUPER_ADMIN']}><DashboardLayout role="admin" /></ProtectedRoute>}>
+        <Route path="/admin/overview" element={<AdminDashboard />} />
       </Route>
 
       {/* 404 */}

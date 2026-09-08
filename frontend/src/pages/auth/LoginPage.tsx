@@ -25,7 +25,7 @@ export default function LoginPage() {
   const searchParams = new URLSearchParams(location.search)
   const redirectTarget = searchParams.get('redirect')
 
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>({
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   })
 
@@ -138,23 +138,56 @@ export default function LoginPage() {
         </motion.button>
       </form>
 
-      {/* Demo credentials */}
-      <div className="mt-6 p-4 rounded-xl border" style={{ background: 'var(--surface-inset)', borderColor: 'var(--border-light)' }}>
-        <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-secondary)' }}>🔧 Demo Accounts (Development Only)</p>
-        <div className="space-y-1">
+      {/* Demo credentials & Quick Fill */}
+      <div className="mt-6 p-4 rounded-2xl border" style={{ background: 'var(--surface-inset)', borderColor: 'var(--border-light)' }}>
+        <div className="flex items-center justify-between mb-2.5">
+          <p className="text-xs font-bold text-slate-800 dark:text-slate-200">🚀 Quick-Fill Login (Dev & Demo)</p>
+          <span className="text-[10px] font-semibold text-brand-600 bg-brand-50 dark:bg-brand-950/40 px-2 py-0.5 rounded-md">Click to auto-fill</span>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {[
-            { email: 'student@careersetu.in', role: 'Student' },
-            { email: 'employer@careersetu.in', role: 'Employer / Recruiter' },
-            { email: 'admin@careersetu.in', role: 'Platform Admin' },
-          ].map(({ email, role }) => (
-            <p key={email} className="text-xs font-mono" style={{ color: 'var(--text-muted)' }}>
-              {role}: <span style={{ color: 'var(--color-brand-500)' }}>{email}</span> / Demo@CareerSetu2024
-            </p>
+            { email: 'sj6161362@gmail.com', role: '👑 Super Admin', note: 'Full Governance' },
+            { email: 'admin@careersetu.in', role: 'Platform Admin', note: 'System Admin' },
+            { email: 'student@careersetu.in', role: 'Student Lead', note: 'Aarav Sharma' },
+            { email: 'employer@careersetu.in', role: 'Employer / ATS', note: 'TechCorp Recruiter' },
+          ].map(({ email, role, note }) => (
+            <button
+              key={email}
+              type="button"
+              onClick={() => {
+                setValue('email', email)
+                setValue('password', 'Demo@CareerSetu2024')
+                toast.success(`Loaded credentials for ${role}`)
+              }}
+              className="p-2.5 rounded-xl border text-left hover:border-brand-500 hover:bg-white dark:hover:bg-slate-800 transition-all group"
+              style={{ background: 'var(--surface-card)', borderColor: 'var(--border-light)' }}
+            >
+              <div className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center justify-between">
+                <span>{role}</span>
+                <span className="text-[10px] text-slate-400 font-normal">{note}</span>
+              </div>
+              <div className="text-[11px] font-mono text-brand-600 truncate mt-0.5">
+                {email}
+              </div>
+            </button>
           ))}
         </div>
       </div>
 
-      <div className="mt-6 text-center">
+      {/* Security & Authentication Guarantees */}
+      <div className="mt-6 pt-4 border-t flex flex-wrap items-center justify-center gap-4 text-[11px] text-slate-500" style={{ borderColor: 'var(--border-light)' }}>
+        <span className="inline-flex items-center gap-1">
+          🔒 <strong>Argon2id</strong> Encryption
+        </span>
+        <span className="inline-flex items-center gap-1">
+          🛡️ <strong>JWT HMAC-512</strong> Stateless Auth
+        </span>
+        <span className="inline-flex items-center gap-1">
+          ⚡ <strong>Rate-Limit</strong> Active
+        </span>
+      </div>
+
+      <div className="mt-4 text-center">
         <p className="text-xs" style={{ color: 'var(--text-muted)' }}>
           By signing in, you agree to our{' '}
           <a href="#" className="underline">Terms of Service</a> and{' '}

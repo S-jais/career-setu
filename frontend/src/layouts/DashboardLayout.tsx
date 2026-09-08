@@ -361,11 +361,11 @@ export default function DashboardLayout({ role = 'student' }: { role?: string })
                 {user?.fullName?.charAt(0) || user?.email?.charAt(0)?.toUpperCase() || 'S'}
               </div>
               <div className="hidden sm:block text-left text-xs">
-                <div className="font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[120px]">
-                  {user?.displayName || user?.fullName || 'Siddhartha Jaiswal'}
+                <div className="font-semibold text-slate-800 dark:text-slate-200 truncate max-w-[140px]">
+                  {user?.displayName || user?.fullName || 'User'}
                 </div>
-                <div className="text-[10px] text-slate-400 truncate max-w-[120px]">
-                  {user?.email || 'sj6161362@gmail.com'}
+                <div className="text-[10px] text-slate-400 truncate max-w-[140px]">
+                  {user?.email || ''}
                 </div>
               </div>
             </div>

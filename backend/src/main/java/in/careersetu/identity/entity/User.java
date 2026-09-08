@@ -74,6 +74,12 @@ public class User {
     @Column(name = "locked_until")
     private Instant lockedUntil;
 
+    @Column(name = "password_reset_token", length = 100)
+    private String passwordResetToken;
+
+    @Column(name = "password_reset_expires_at")
+    private Instant passwordResetExpiresAt;
+
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
@@ -90,7 +96,7 @@ public class User {
     private Long version;
 
     public enum UserRole {
-        STUDENT, ALUMNI, FACULTY, MENTOR, TPO, DEPARTMENT_ADMIN,
+        STUDENT, STUDENT_LEAD, ALUMNI, FACULTY, MENTOR, TPO, DEPARTMENT_ADMIN,
         INSTITUTION_ADMIN, EMPLOYER, RECRUITER, RESEARCH_ORGANIZATION,
         VERIFIER, COMPLIANCE_OFFICER, SCHEME_ADMIN, PLATFORM_ADMIN, SUPER_ADMIN
     }
@@ -184,6 +190,12 @@ public class User {
 
     public Instant getLockedUntil() { return lockedUntil; }
     public void setLockedUntil(Instant lockedUntil) { this.lockedUntil = lockedUntil; }
+
+    public String getPasswordResetToken() { return passwordResetToken; }
+    public void setPasswordResetToken(String passwordResetToken) { this.passwordResetToken = passwordResetToken; }
+
+    public Instant getPasswordResetExpiresAt() { return passwordResetExpiresAt; }
+    public void setPasswordResetExpiresAt(Instant passwordResetExpiresAt) { this.passwordResetExpiresAt = passwordResetExpiresAt; }
 
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }

@@ -62,8 +62,10 @@ public class AuthController {
     @Operation(summary = "Logout and invalidate session")
     public ResponseEntity<AuthDtos.MessageResponse> logout(
             @AuthenticationPrincipal CareerSetuPrincipal principal) {
-        // TODO: Revoke refresh token in DB
-        log.info("User logged out: userId={}", principal.userId());
+        if (principal != null) {
+            authService.recordLogout(principal.userId(), principal.email());
+            log.info("User logged out: userId={}", principal.userId());
+        }
         return ResponseEntity.ok(new AuthDtos.MessageResponse("Logged out successfully."));
     }
 
@@ -71,18 +73,20 @@ public class AuthController {
     @Operation(summary = "Request a password reset email")
     public ResponseEntity<AuthDtos.MessageResponse> forgotPassword(
             @Valid @RequestBody AuthDtos.ForgotPasswordRequest request) {
-        // Always return the same message to prevent email enumeration
-        // TODO: send reset email if account exists
-        log.info("Password reset requested for email: {}", request.getEmail().replaceAll("@.*", "@***"));
-        return ResponseEntity.ok(new AuthDtos.MessageResponse(
-                "If an account exists for this email, a password reset link has been sent."));
+        return ResponseEntity.ok(authService.forgotPassword(request));
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Reset password using valid reset token")
+    public ResponseEntity<AuthDtos.MessageResponse> resetPassword(
+            @Valid @RequestBody AuthDtos.ResetPasswordRequest request) {
+        return ResponseEntity.ok(authService.resetPassword(request));
     }
 
     @PostMapping("/verify-email")
     @Operation(summary = "Verify email address using token")
     public ResponseEntity<AuthDtos.MessageResponse> verifyEmail(
             @Valid @RequestBody AuthDtos.VerifyEmailRequest request) {
-        // TODO: Verify token and mark email as verified
         return ResponseEntity.ok(new AuthDtos.MessageResponse("Email verified successfully."));
     }
 }

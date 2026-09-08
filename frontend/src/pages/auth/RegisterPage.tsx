@@ -56,20 +56,27 @@ export default function RegisterPage() {
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true)
     try {
-      const response = await authApi.register({
-        fullName: data.fullName,
-        email: data.email,
+      const normalizedEmail = data.email.toLowerCase().trim()
+      await authApi.register({
+        fullName: data.fullName.trim(),
+        email: normalizedEmail,
         password: data.password,
         role: data.role,
         acceptedTerms: data.acceptedTerms,
         acceptedPrivacyPolicy: data.acceptedPrivacyPolicy,
       })
-      setAuth(response.user, response.accessToken, response.refreshToken)
-      toast.success('Account created! Welcome to CareerSetu.')
-      navigate('/dashboard')
+      toast.success('Account created successfully! Your CareerSetu account has been created. You can now sign in.', {
+        duration: 5000,
+        icon: '🎉',
+      })
+      navigate('/auth/login')
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Registration failed. Please try again.'
-      toast.error(message)
+      const message = error instanceof Error ? error.message : ''
+      if (message.toLowerCase().includes('already exists') || message.toLowerCase().includes('duplicate') || message.includes('EMAIL_ALREADY_EXISTS')) {
+        toast.error('An account with this email already exists. Please sign in instead.', { duration: 5000 })
+      } else {
+        toast.error(message || 'Registration failed. Please check your details and try again.')
+      }
     } finally {
       setIsLoading(false)
     }

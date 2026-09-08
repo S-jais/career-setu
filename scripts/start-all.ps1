@@ -25,6 +25,7 @@ if (-not $backendRunning) {
 
     $mvnExecutable = "mvn"
     $mvnCandidates = @(
+        (Join-Path $backendPath "mvnw.cmd"),
         "C:\Users\siddhartha jaiswal\.maven\maven-3.9.15\bin\mvn.cmd",
         "$env:USERPROFILE\.maven\maven-3.9.15\bin\mvn.cmd",
         "C:\tools\maven\apache-maven-3.9.9\bin\mvn.cmd"

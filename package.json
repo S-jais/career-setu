@@ -4,13 +4,16 @@
   "private": true,
   "description": "CareerSetu — India-First AI Career & Academia-Industry Collaboration Platform",
   "scripts": {
-    "dev": "npm --prefix frontend run dev",
+    "dev": "concurrently --kill-others-on-fail --prefix \"[{name}]\" --names \"BACKEND,FRONTEND,AI\" --prefix-colors \"blue.bold,green.bold,magenta.bold\" \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:ai\"",
+    "dev:backend": "node scripts/dev-backend.js",
     "dev:frontend": "npm --prefix frontend run dev",
-    "dev:ai": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"cd ai-service; .\\venv\\Scripts\\python.exe -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload\"",
-    "dev:backend": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"cd backend; & 'C:\\Users\\siddhartha jaiswal\\.maven\\maven-3.9.15\\bin\\mvn.cmd' spring-boot:run '-Dspring-boot.run.profiles=local'\"",
-    "dev:all": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\start-all.ps1",
-    "start": "powershell -NoProfile -ExecutionPolicy Bypass -File .\\scripts\\start-all.ps1",
+    "dev:ai": "node scripts/dev-ai.js",
+    "dev:all": "npm run dev",
+    "start": "npm run dev",
     "build": "npm --prefix frontend run build",
     "lint": "npm --prefix frontend run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5"
   }
 }

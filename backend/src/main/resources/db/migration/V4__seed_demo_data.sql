@@ -3,6 +3,12 @@
 -- ============================================================
 
 -- ── Skill Categories ──────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS skill_categories (
+    id         UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name       VARCHAR(100) NOT NULL UNIQUE,
+    sort_order INT NOT NULL DEFAULT 0
+);
+
 INSERT INTO skill_categories (id, name, sort_order) VALUES
     (uuid_generate_v4(), 'Programming Languages', 1),
     (uuid_generate_v4(), 'Web Development', 2),

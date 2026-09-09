@@ -5,91 +5,85 @@ import { GraduationCap, Briefcase, Building2, Sparkles } from 'lucide-react'
 
 export default function AuthLayout() {
   return (
-    <div className="min-h-screen flex" style={{ background: 'var(--surface-base)' }}>
-      {/* Left — Brand panel */}
+    <div className="min-h-screen flex bg-[var(--mist)] text-[var(--slate)] font-sans antialiased selection:bg-[var(--marigold)] selection:text-[var(--ink)]">
+      {/* Left — Brand panel (Solid --ink, Fraunces typography, per design system spec) */}
       <motion.div
-        initial={{ opacity: 0, x: -30 }}
+        initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
-        className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 relative overflow-hidden"
-        style={{ background: 'linear-gradient(135deg, hsl(224, 75%, 52%), hsl(262, 72%, 48%))' }}>
-
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-10"
-             style={{
-               backgroundImage: 'radial-gradient(circle at 20% 30%, white 1px, transparent 1px)',
-               backgroundSize: '40px 40px'
-             }} />
-
+        transition={{ duration: 0.5 }}
+        className="hidden lg:flex lg:w-1/2 flex-col justify-between p-12 lg:p-14 relative bg-[var(--ink)] text-[var(--mist)] border-r border-[var(--line)]"
+      >
         <div className="relative z-10">
-          <Link to="/" className="flex items-center gap-3 mb-14 group">
-            <div className="w-12 h-12 rounded-2xl bg-white p-1 shadow-lg flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
-              <img src="/career-setu-mark.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-2xl font-display text-white tracking-tight leading-tight">CareerSetu</span>
-              <span className="text-[10px] text-white/80 font-semibold tracking-wider uppercase">Bridging Today to a Brighter Tomorrow</span>
-            </div>
+          <Link to="/" className="inline-flex items-center gap-2.5 mb-14 group">
+            <svg className="w-[30px] h-[30px] shrink-0" viewBox="0 0 26 26" fill="none">
+              <path d="M2 19C6 12 9 9 13 9C17 9 20 12 24 19" stroke="#EFF2EE" strokeWidth="2.2" strokeLinecap="round" />
+              <circle cx="2" cy="19" r="2" fill="#1C7C72" />
+              <circle cx="24" cy="19" r="2" fill="#E2963A" />
+            </svg>
+            <span className="font-display font-medium text-2xl text-[var(--paper)] tracking-tight">
+              CareerSetu
+            </span>
           </Link>
 
-          <div className="space-y-8">
+          <div className="space-y-9">
             <div>
-              <h1 className="text-4xl font-bold font-display text-white leading-snug mb-3">
-                Skills to Opportunities.<br />Campus to Career.
+              <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[var(--marigold)] mb-3">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--marigold)]" />
+                Academia–Industry Collaboration OS
+              </div>
+              <h1 className="text-[2.2rem] lg:text-[2.6rem] font-medium font-display leading-[1.12] mb-3" style={{ color: 'var(--paper)' }}>
+                Skills to Opportunities.<br />Campus to <em className="italic font-normal text-[var(--marigold)]">career</em>.
               </h1>
-              <p className="text-white/75 text-lg">
-                India's first AI Career & Academia–Industry Collaboration OS.
+              <p className="text-[#B9C4D4] text-[1.05rem] leading-[1.6] max-w-[42ch]">
+                The verified platform connecting ambitious students, accredited institutions, and forward-looking hiring partners across India.
               </p>
             </div>
 
             <div className="space-y-4">
               {[
                 { icon: GraduationCap, text: 'Verified Career Passport for every student' },
-                { icon: Briefcase, text: 'Matched opportunities with explainable AI scores' },
+                { icon: Briefcase, text: 'Matched opportunities with explainable fit scores' },
                 { icon: Building2, text: 'Structured internships with mentor guidance' },
-                { icon: Sparkles, text: 'AI career intelligence that you can understand' },
+                { icon: Sparkles, text: 'AI career intelligence with clear benchmark evidence' },
               ].map(({ icon: Icon, text }) => (
-                <div key={text} className="flex items-center gap-3 text-white/85">
-                  <div className="w-8 h-8 rounded-lg bg-white/15 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-4 h-4 text-white" />
+                <div key={text} className="flex items-center gap-3.5 text-[#DCE3EC]">
+                  <div className="w-7 h-7 rounded-[3px] bg-white/10 flex items-center justify-center shrink-0">
+                    <Icon className="w-4 h-4 text-[var(--teal)]" />
                   </div>
-                  <span className="text-sm">{text}</span>
+                  <span className="text-[0.92rem] font-medium">{text}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        <div className="relative z-10">
-          <p className="text-white/50 text-xs">
-            Security controls tested against defined threat model.
-            Compliance-ready architecture. Formal review required for production.
+        <div className="relative z-10 pt-8 border-t border-white/10">
+          <p className="text-[#8FA0B8] text-xs leading-relaxed">
+            Enterprise-grade data protection and verified credentials. Bridging campus curriculum directly with national industry standards.
           </p>
         </div>
       </motion.div>
 
       {/* Right — Auth form */}
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-6 sm:p-10 bg-[var(--mist)]">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="w-full max-w-md">
-
+          transition={{ duration: 0.4 }}
+          className="w-full max-w-md"
+        >
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center gap-2.5 mb-8">
-            <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 p-0.5 border shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden"
-                 style={{ borderColor: 'var(--border-light)' }}>
-              <img src="/career-setu-mark.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
-            </div>
-            <div className="flex flex-col">
-              <span className="font-bold text-lg font-display leading-tight" style={{ color: 'var(--text-primary)' }}>
-                Career<span style={{ color: 'var(--color-brand-500)' }}>Setu</span>
+            <Link to="/" className="flex items-center gap-2">
+              <svg className="w-[26px] h-[26px] shrink-0" viewBox="0 0 26 26" fill="none">
+                <path d="M2 19C6 12 9 9 13 9C17 9 20 12 24 19" stroke="#132A46" strokeWidth="2.2" strokeLinecap="round" />
+                <circle cx="2" cy="19" r="2" fill="#1C7C72" />
+                <circle cx="24" cy="19" r="2" fill="#E2963A" />
+              </svg>
+              <span className="font-display font-medium text-xl text-[var(--ink)]">
+                CareerSetu
               </span>
-              <span className="text-[9px] font-medium" style={{ color: 'var(--text-muted)' }}>
-                Skills to Opportunities
-              </span>
-            </div>
+            </Link>
           </div>
 
           <Outlet />

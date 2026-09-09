@@ -2,13 +2,13 @@ import { Link } from 'react-router-dom'
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-center px-4" style={{ background: 'var(--surface-base)' }}>
-      <div className="text-8xl font-bold font-display gradient-text mb-4">404</div>
-      <h1 className="text-2xl font-bold font-display mb-2" style={{ color: 'var(--text-primary)' }}>Page not found</h1>
-      <p className="text-sm mb-8 max-w-md" style={{ color: 'var(--text-secondary)' }}>
-        The page you're looking for doesn't exist or has been moved.
+    <div className="min-h-screen flex flex-col items-center justify-center text-center px-4 bg-[var(--mist)] selection:bg-[var(--marigold)] selection:text-[var(--ink)]">
+      <div className="text-8xl font-medium font-display text-[var(--marigold-deep)] mb-3 leading-none">404</div>
+      <h1 className="text-3xl font-medium font-display mb-2 text-[var(--ink)]">Page not found</h1>
+      <p className="text-sm mb-8 max-w-md text-[var(--slate)]">
+        The page you are looking for does not exist or has been moved.
       </p>
-      <Link to="/" className="px-6 py-3 rounded-xl font-semibold text-white gradient-brand">
+      <Link to="/" className="btn btn-primary">
         Back to Home
       </Link>
     </div>

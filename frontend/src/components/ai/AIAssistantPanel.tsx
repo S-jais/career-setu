@@ -224,7 +224,7 @@ export default function AIAssistantPanel({
   // Panel sizing
   const panelClasses = isMaximized
     ? 'fixed inset-4 z-[70] sm:inset-6'
-    : 'fixed bottom-0 right-0 z-[70] w-full h-full sm:bottom-6 sm:right-6 sm:w-[440px] sm:h-[620px] sm:rounded-2xl'
+    : 'fixed bottom-0 right-0 z-[70] w-full h-full sm:bottom-6 sm:right-6 sm:w-[440px] sm:h-[620px] sm:rounded-[3px]'
 
   return (
     <AnimatePresence>
@@ -235,37 +235,33 @@ export default function AIAssistantPanel({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[65] bg-black/30 sm:hidden"
+            className="fixed inset-0 z-[65] bg-[var(--ink)]/40 backdrop-blur-xs sm:hidden"
             onClick={onClose}
           />
 
           {/* Panel */}
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 15, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className={`${panelClasses} flex flex-col overflow-hidden border shadow-2xl`}
+            exit={{ opacity: 0, y: 15, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className={`${panelClasses} flex flex-col overflow-hidden border border-[var(--line)] shadow-lg rounded-[3px]`}
             style={{
-              background: 'var(--surface-card)',
-              borderColor: 'var(--border-light)',
-              borderRadius: isMaximized ? 'var(--radius-xl)' : undefined,
+              background: 'var(--paper)',
             }}
             role="dialog"
             aria-label="Career Setu AI Assistant"
           >
             {/* ── Header ──────────────────────────────────── */}
             <div
-              className="glass flex items-center gap-3 px-4 py-3 border-b flex-shrink-0"
-              style={{ borderColor: 'var(--border-light)' }}
+              className="flex items-center gap-3 px-4 py-3 border-b border-[var(--line)] bg-[var(--mist-dim)]/60 flex-shrink-0"
             >
-              <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 p-0.5 border shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden"
-                   style={{ borderColor: 'var(--border-light)' }}>
-                <img src="/career-setu-mark.png" alt="Career Setu Logo" className="w-full h-full object-contain" />
+              <div className="w-8 h-8 rounded-[3px] bg-[var(--paper)] p-0.5 border border-[var(--line)] flex items-center justify-center shrink-0">
+                <Brain className="w-4.5 h-4.5 text-[var(--ink)]" />
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-sm font-bold font-display" style={{ color: 'var(--text-primary)' }}>
-                  CAREER SETU AI
+                <h2 className="text-sm font-medium font-display text-[var(--ink)] tracking-tight">
+                  CareerSetu AI
                 </h2>
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -313,13 +309,13 @@ export default function AIAssistantPanel({
                 <div className="space-y-4">
                   {/* Welcome */}
                   <div className="text-center py-4">
-                    <div className="w-14 h-14 rounded-2xl gradient-brand flex items-center justify-center text-white mx-auto mb-3 shadow-lg">
-                      <Brain className="w-7 h-7" />
+                    <div className="w-12 h-12 rounded-[3px] bg-[var(--ink)] flex items-center justify-center text-[var(--paper)] mx-auto mb-3 shadow-xs">
+                      <Brain className="w-6 h-6 text-[var(--marigold)]" />
                     </div>
-                    <h3 className="text-base font-bold font-display" style={{ color: 'var(--text-primary)' }}>
+                    <h3 className="text-base font-medium font-display text-[var(--ink)]">
                       Hi{userName ? `, ${userName}` : ''}! 👋
                     </h3>
-                    <p className="text-xs mt-1 max-w-xs mx-auto" style={{ color: 'var(--text-secondary)' }}>
+                    <p className="text-xs mt-1 max-w-xs mx-auto text-[var(--slate)] opacity-85 leading-relaxed">
                       I'm your Career Setu guide. I can help you understand the platform, find features, navigate your career journey, and answer questions about your profile.
                     </p>
                   </div>
@@ -330,20 +326,16 @@ export default function AIAssistantPanel({
                       <button
                         key={card.title}
                         onClick={() => sendMessage(card.prompt)}
-                        className="text-left p-3 rounded-xl border transition-all hover:shadow-md hover:-translate-y-0.5 group"
-                        style={{
-                          background: 'var(--surface-card)',
-                          borderColor: 'var(--border-light)',
-                        }}
+                        className="text-left p-3 rounded-[3px] border border-[var(--line)] bg-[var(--paper)] transition-colors hover:border-[var(--ink)] group cursor-pointer"
                       >
-                        <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${card.color} flex items-center justify-center text-white mb-2`}>
-                          <card.icon className="w-4 h-4" />
+                        <div className="w-7 h-7 rounded-[3px] bg-[var(--ink)] flex items-center justify-center text-[var(--marigold)] mb-2">
+                          <card.icon className="w-3.5 h-3.5" />
                         </div>
-                        <p className="text-xs font-semibold" style={{ color: 'var(--text-primary)' }}>
+                        <p className="text-xs font-semibold text-[var(--ink)]">
                           {card.title}
                         </p>
-                        <p className="text-[10px] mt-0.5 line-clamp-1" style={{ color: 'var(--text-muted)' }}>
-                          "{card.prompt}"
+                        <p className="text-[10px] mt-0.5 line-clamp-1 text-[var(--slate)] opacity-70">
+                          &ldquo;{card.prompt}&rdquo;
                         </p>
                       </button>
                     ))}
@@ -529,7 +521,7 @@ export default function AIAssistantPanel({
             </div>
 
             {/* ── Input area ──────────────────────────────── */}
-            <div className="border-t p-3 flex-shrink-0" style={{ borderColor: 'var(--border-light)' }}>
+            <div className="border-t border-[var(--line)] p-3 flex-shrink-0 bg-[var(--paper)]">
               <div className="flex gap-2">
                 <input
                   ref={inputRef}
@@ -542,25 +534,18 @@ export default function AIAssistantPanel({
                     }
                   }}
                   placeholder="Ask Career Setu AI anything…"
-                  className="flex-1 px-3.5 py-2.5 rounded-xl border text-sm outline-none transition-all
-                    focus:ring-2 focus:ring-brand-400/30"
-                  style={{
-                    background: 'var(--surface-inset)',
-                    borderColor: 'var(--border-default)',
-                    color: 'var(--text-primary)',
-                  }}
+                  className="flex-1 px-3 py-2 rounded-[3px] border border-[var(--line)] bg-[var(--mist-dim)]/50 text-xs sm:text-sm text-[var(--ink)] outline-none transition-colors focus:border-[var(--ink)]"
                   disabled={isLoading}
                   aria-label="Type your question"
                 />
                 <button
                   onClick={() => sendMessage(input)}
                   disabled={isLoading || !input.trim()}
-                  className="px-3.5 py-2.5 rounded-xl font-medium text-white gradient-brand
-                    disabled:opacity-40 transition-all flex items-center justify-center shadow-sm
-                    hover:opacity-90 active:scale-95"
+                  className="px-3 py-2 rounded-[3px] font-semibold text-[var(--paper)] bg-[var(--ink)] hover:bg-[var(--ink-soft)]
+                    disabled:opacity-40 transition-colors flex items-center justify-center cursor-pointer"
                   aria-label="Send message"
                 >
-                  <Send className="w-4 h-4" />
+                  <Send className="w-4 h-4 text-[var(--marigold)]" />
                 </button>
               </div>
               {currentPageName && (

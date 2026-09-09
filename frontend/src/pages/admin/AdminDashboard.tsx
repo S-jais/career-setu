@@ -68,26 +68,22 @@ export default function AdminDashboard() {
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-6 md:p-8 rounded-3xl relative overflow-hidden shadow-xl"
-        style={{
-          background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)',
-          border: '1px solid rgba(165, 180, 252, 0.2)'
-        }}
+        className="p-6 md:p-8 rounded-[3px] relative overflow-hidden bg-[var(--ink)] text-[var(--mist)] border border-[var(--line)]"
       >
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-400 text-amber-950 flex items-center gap-1.5 shadow-sm">
+              <span className="px-2.5 py-0.5 rounded-[2px] text-xs font-semibold uppercase tracking-wider bg-[var(--marigold)] text-[var(--ink)] flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5" /> {isSuperAdmin ? 'Super Administrator' : 'Platform Administrator'}
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-900/60 text-indigo-200 border border-indigo-700/50">
+              <span className="px-2.5 py-0.5 rounded-[2px] text-xs font-medium bg-white/10 text-[var(--mist)] border border-white/20">
                 Server-Authoritative RBAC
               </span>
             </div>
-            <h1 className="text-2xl md:text-4xl font-extrabold text-white tracking-tight font-display">
+            <h1 className="text-2xl md:text-3xl font-medium text-[var(--paper)] tracking-tight font-display">
               Platform Command Center
             </h1>
-            <p className="text-indigo-200 text-sm md:text-base max-w-2xl">
+            <p className="text-[#B9C4D4] text-xs sm:text-sm max-w-2xl leading-relaxed">
               Operating with verified administrative session. Real-time platform governance, user directory, and security audit logs.
             </p>
           </div>
@@ -96,23 +92,24 @@ export default function AdminDashboard() {
             <button
               onClick={() => loadData(true)}
               disabled={isRefreshing}
-              className="px-4 py-2.5 rounded-xl text-xs font-semibold text-indigo-100 bg-indigo-950/60 hover:bg-indigo-900/80 border border-indigo-700/50 flex items-center gap-2 transition-all shadow-sm disabled:opacity-60"
+              className="px-3.5 py-2 rounded-[3px] text-xs font-semibold text-[var(--paper)] bg-white/10 hover:bg-white/20 border border-white/20 flex items-center gap-2 transition-colors disabled:opacity-60 cursor-pointer"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
               Refresh Telemetry
             </button>
             <Link
               to="/student/digital-twin"
-              className="px-4 py-2.5 rounded-xl text-xs font-bold text-indigo-950 bg-white hover:bg-indigo-50 flex items-center gap-2 transition-all shadow-md"
+              className="btn btn-accent text-xs py-2 px-3.5 gap-1.5"
             >
-              Digital Twin AI <ArrowUpRight className="w-3.5 h-3.5" />
+              <span>Digital Twin AI</span>
+              <ArrowUpRight className="w-3.5 h-3.5" />
             </Link>
           </div>
         </div>
       </motion.div>
 
       {/* ── Tab Selector ────────────────────────────────────── */}
-      <div className="flex items-center gap-2 border-b overflow-x-auto" style={{ borderColor: 'var(--border-default)' }}>
+      <div className="flex items-center gap-2 border-b border-[var(--line)] overflow-x-auto">
         {[
           { id: 'overview', label: 'Platform Telemetry', icon: Activity },
           { id: 'users', label: 'User Directory', icon: Users, badge: users.length },
@@ -125,17 +122,17 @@ export default function AdminDashboard() {
             <button
               key={tab.id}
               onClick={() => setSelectedTab(tab.id as typeof selectedTab)}
-              className={`pb-3.5 px-4 text-sm font-semibold flex items-center gap-2 border-b-2 whitespace-nowrap transition-all ${
+              className={`pb-3 px-3.5 text-xs font-semibold flex items-center gap-2 border-b-2 whitespace-nowrap transition-colors cursor-pointer ${
                 active
-                  ? 'border-indigo-600 text-indigo-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-900 dark:hover:text-gray-200'
+                  ? 'border-[var(--ink)] text-[var(--ink)]'
+                  : 'border-transparent text-[var(--slate)] hover:text-[var(--ink)]'
               }`}
             >
               <Icon className="w-4 h-4" />
               <span>{tab.label}</span>
               {tab.badge !== undefined && (
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  active ? 'bg-indigo-100 text-indigo-700' : 'bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-gray-400'
+                <span className={`px-1.5 py-0.2 rounded-[2px] text-[10px] font-bold ${
+                  active ? 'bg-[var(--ink)] text-[var(--paper)]' : 'bg-[var(--mist-dim)] text-[var(--slate)]'
                 }`}>
                   {tab.badge}
                 </span>

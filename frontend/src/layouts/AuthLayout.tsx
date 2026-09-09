@@ -24,7 +24,7 @@ export default function AuthLayout() {
         <div className="relative z-10">
           <Link to="/" className="flex items-center gap-3 mb-14 group">
             <div className="w-12 h-12 rounded-2xl bg-white p-1 shadow-lg flex items-center justify-center flex-shrink-0 overflow-hidden group-hover:scale-105 transition-transform">
-              <img src="/career-setu-logo.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
+              <img src="/career-setu-mark.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-2xl font-display text-white tracking-tight leading-tight">CareerSetu</span>
@@ -80,7 +80,7 @@ export default function AuthLayout() {
           <div className="lg:hidden flex items-center gap-2.5 mb-8">
             <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 p-0.5 border shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden"
                  style={{ borderColor: 'var(--border-light)' }}>
-              <img src="/career-setu-logo.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
+              <img src="/career-setu-mark.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col">
               <span className="font-bold text-lg font-display leading-tight" style={{ color: 'var(--text-primary)' }}>

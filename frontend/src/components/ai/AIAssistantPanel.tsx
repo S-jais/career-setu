@@ -261,7 +261,7 @@ export default function AIAssistantPanel({
             >
               <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 p-0.5 border shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden"
                    style={{ borderColor: 'var(--border-light)' }}>
-                <img src="/career-setu-logo.png" alt="Career Setu Logo" className="w-full h-full object-contain" />
+                <img src="/career-setu-mark.png" alt="Career Setu Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex-1 min-w-0">
                 <h2 className="text-sm font-bold font-display" style={{ color: 'var(--text-primary)' }}>

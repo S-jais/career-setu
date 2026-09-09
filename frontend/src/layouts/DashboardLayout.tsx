@@ -103,7 +103,7 @@ export default function DashboardLayout({ role = 'student' }: { role?: string })
           <Link to="/" className="flex items-center gap-2.5 flex-1 group min-w-0">
             <div className="w-9 h-9 rounded-xl bg-white dark:bg-slate-800 p-0.5 border shadow-sm flex items-center justify-center flex-shrink-0 overflow-hidden"
                  style={{ borderColor: 'var(--border-light)' }}>
-              <img src="/career-setu-logo.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
+              <img src="/career-setu-mark.png" alt="CareerSetu Logo" className="w-full h-full object-contain" />
             </div>
             <div className="flex flex-col min-w-0">
               <span className="font-bold text-base font-display leading-tight truncate" style={{ color: 'var(--text-primary)' }}>

@@ -77,9 +77,12 @@ public class SecurityConfig {
 
             // Authorization rules
             .authorizeHttpRequests(auth -> auth
+                // Explicitly allow preflight CORS requests
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 // Public endpoints
                 .requestMatchers(HttpMethod.GET, "/actuator/health", "/actuator/info").permitAll()
                 .requestMatchers("/api/v1/auth/**").permitAll()
+                .requestMatchers("/error").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/opportunities/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/companies/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/skills/**").permitAll()
@@ -115,7 +118,7 @@ public class SecurityConfig {
         config.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

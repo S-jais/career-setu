@@ -22,21 +22,26 @@ apiClient.interceptors.request.use((config) => {
   return config
 })
 
-// Handle auth errors
+// Handle auth and API errors
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response?.status === 401) {
-      // Token expired — clear auth and redirect
+    // 1. Extract structured error message from API response if present
+    const apiError = error.response?.data
+    if (apiError?.message) {
+      // If unauthorized on a protected page (and not in an auth flow), clear session
+      if (error.response?.status === 401 && !window.location.pathname.startsWith('/auth')) {
+        useAuthStore.getState().clearAuth()
+        window.location.href = '/auth/login'
+      }
+      return Promise.reject(new Error(apiError.message))
+    }
+
+    // 2. Token expired on protected routes with no custom message
+    if (error.response?.status === 401 && !window.location.pathname.startsWith('/auth')) {
       useAuthStore.getState().clearAuth()
       window.location.href = '/auth/login'
       return Promise.reject(new Error('Session expired. Please sign in again.'))
-    }
-
-    // Extract safe error message from API response
-    const apiError = error.response?.data
-    if (apiError?.message) {
-      return Promise.reject(new Error(apiError.message))
     }
 
     if (error.code === 'ECONNABORTED') {
@@ -44,7 +49,7 @@ apiClient.interceptors.response.use(
     }
 
     if (!error.response) {
-      return Promise.reject(new Error('Unable to connect to CareerSetu. Please check your connection.'))
+      return Promise.reject(new Error('Unable to connect to CareerSetu backend. Please check your connection or try again shortly.'))
     }
 
     return Promise.reject(error)

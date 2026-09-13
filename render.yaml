@@ -34,6 +34,8 @@ services:
           property: connectionString
       - key: FEATURE_AI_ENABLED
         value: "true"
+      - key: AI_SERVICE_URL
+        value: "http://careersetu-ai:10000"
 
   # ── 2. FastAPI AI Service (Python 3.11) ─────────────────────
   - type: web
@@ -49,6 +51,8 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.11.9"
+      - key: GEMINI_API_KEY
+        sync: false
 
 databases:
   # ── Render Managed PostgreSQL Database (Free Tier) ─────────

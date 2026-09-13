@@ -74,7 +74,7 @@ careersetu:
     refresh-token-expiry-days: ${JWT_REFRESH_TOKEN_EXPIRY_DAYS:7}
 
   ai:
-    service-url: ${AI_SERVICE_URL:http://localhost:8000}
+    service-url: ${AI_SERVICE_URL:http://careersetu-ai:10000}
     internal-secret: ${AI_SERVICE_INTERNAL_SECRET:render-internal-secret}
     enabled: ${FEATURE_AI_ENABLED:true}
     timeout-seconds: 30

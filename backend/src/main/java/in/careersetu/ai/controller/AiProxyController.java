@@ -36,13 +36,13 @@ public class AiProxyController {
     private final String aiServiceUrl;
 
     public AiProxyController(
-            @Value("${careersetu.ai.service-url:http://localhost:8000}") String aiServiceUrl) {
+            @Value("${careersetu.ai.service-url:http://127.0.0.1:8000}") String aiServiceUrl) {
         this.restTemplate = new RestTemplate();
         this.aiServiceUrl = aiServiceUrl;
     }
 
     @RequestMapping(value = "/**", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
-    public ResponseEntity<byte[]> proxyRequest(HttpServletRequest request, @RequestBody(required = false) byte[] body) throws Exception {
+    public ResponseEntity<byte[]> proxyRequest(HttpServletRequest request) throws Exception {
         String requestUrl = request.getRequestURI();
         
         // Strip context path if present (e.g. if deployed under /api/v1/ai)
@@ -94,6 +94,7 @@ public class AiProxyController {
             // Must not set content-type manually to allow RestTemplate to generate boundary
             httpEntity = new HttpEntity<>(parts, multipartHeaders);
         } else {
+            byte[] body = request.getInputStream().readAllBytes();
             httpEntity = new HttpEntity<>(body, headers);
         }
 

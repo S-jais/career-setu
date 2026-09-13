@@ -98,6 +98,15 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
 
+            // Exception Handling for 401 instead of default 403
+            .exceptionHandling(exc -> exc
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"message\": \"Session expired or invalid token. Please sign in again.\"}");
+                })
+            )
+
             // JWT filter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

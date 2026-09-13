@@ -46,7 +46,7 @@ management:
 
 careersetu:
   ai:
-    service-url: http://localhost:8000
+    service-url: http://127.0.0.1:8000
     enabled: true
   features:
     mfa-enabled: false

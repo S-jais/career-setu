@@ -38,7 +38,9 @@ public class AiProxyController {
     public AiProxyController(
             @Value("${careersetu.ai.service-url:http://127.0.0.1:8000}") String aiServiceUrl) {
         this.restTemplate = new RestTemplate();
-        this.aiServiceUrl = aiServiceUrl;
+        this.aiServiceUrl = (aiServiceUrl != null && aiServiceUrl.contains("localhost"))
+                ? aiServiceUrl.replace("localhost", "127.0.0.1")
+                : aiServiceUrl;
     }
 
     @RequestMapping(value = "/**", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})

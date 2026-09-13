@@ -58,6 +58,14 @@ public class CareerSetuException extends RuntimeException {
         );
     }
 
+    public static CareerSetuException unauthorized(String message) {
+        return new CareerSetuException(
+                "UNAUTHORIZED",
+                message,
+                HttpStatus.UNAUTHORIZED
+        );
+    }
+
     public static CareerSetuException conflict(String code, String message) {
         return new CareerSetuException(code, message, HttpStatus.CONFLICT);
     }

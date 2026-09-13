@@ -90,7 +90,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/mentors/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/drives/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/assessment/verify/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/v1/institutions/stats").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/institutions/**").permitAll()
                 .requestMatchers("/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 // Admin endpoints require SUPER_ADMIN or PLATFORM_ADMIN
                 .requestMatchers("/api/v1/admin/**").hasAnyRole("SUPER_ADMIN", "PLATFORM_ADMIN")

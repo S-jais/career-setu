@@ -157,7 +157,7 @@ export default function AICopilot() {
         messages: history,
         student_context: {
           name: user?.fullName || 'Aarav Sharma',
-          target_role: 'Full Stack & Backend Software Engineer',
+          target_role: targetRole || 'Full Stack Engineer',
           skills: verifiedSkillNames.length > 0 ? verifiedSkillNames : ['Java', 'SQL', 'Git', 'REST APIs'],
           education_level: 'Undergraduate B.Tech'
         }
@@ -446,7 +446,7 @@ _AI-assisted guidance based on verified profile competencies._`,
               <div className="space-y-2.5 text-xs">
                 <div className="flex justify-between py-1 border-b" style={{ borderColor: 'var(--border-light)' }}>
                   <span className="text-slate-400">Target Role</span>
-                  <span className="font-semibold text-slate-700 dark:text-slate-200">Full Stack Engineer</span>
+                  <span className="font-semibold text-slate-700 dark:text-slate-200">{targetRole || 'Full Stack Engineer'}</span>
                 </div>
                 <div className="flex justify-between py-1 border-b" style={{ borderColor: 'var(--border-light)' }}>
                   <span className="text-slate-400">Verified Badges</span>

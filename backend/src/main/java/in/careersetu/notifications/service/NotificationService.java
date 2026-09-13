@@ -39,6 +39,15 @@ public class NotificationService {
         });
     }
 
+    @Transactional
+    public void markAllAsRead(String recipientEmail) {
+        List<AppNotification> list = notificationRepository.findByRecipientEmailOrderByCreatedAtDesc(recipientEmail);
+        for (AppNotification n : list) {
+            n.setReadStatus(true);
+        }
+        notificationRepository.saveAll(list);
+    }
+
     @Transactional(readOnly = true)
     public long getUnreadCount(String recipientEmail) {
         return notificationRepository.countByRecipientEmailAndReadStatusFalse(recipientEmail);

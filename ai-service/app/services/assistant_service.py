@@ -655,7 +655,8 @@ async def handle_assistant_chat(request: AssistantRequest) -> AssistantResponse:
 
         raw_response = await provider.generate_response(
             prompt=full_prompt,
-            system_instruction=system_prompt
+            system_instruction=system_prompt,
+            user_query=sanitized_message
         )
 
         # Parse and strictly validate navigation blocks

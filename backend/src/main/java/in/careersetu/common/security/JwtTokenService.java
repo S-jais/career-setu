@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
 import java.util.*;
 
@@ -32,10 +34,26 @@ public class JwtTokenService {
             @Value("${careersetu.jwt.secret}") String jwtSecret,
             @Value("${careersetu.jwt.access-token-expiry-minutes:15}") long accessTokenExpiryMinutes,
             @Value("${careersetu.jwt.refresh-token-expiry-days:7}") long refreshTokenExpiryDays) {
-        if (jwtSecret.length() < 32) {
-            throw new IllegalStateException("JWT secret must be at least 256 bits (32 characters)");
+        if (jwtSecret == null || jwtSecret.trim().length() < 16) {
+            throw new IllegalStateException("JWT secret must not be empty or too short");
         }
-        this.signingKey = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        
+        byte[] rawBytes = jwtSecret.trim().getBytes(StandardCharsets.UTF_8);
+        byte[] keyBytes;
+        if (rawBytes.length >= 64) {
+            // Already 512+ bits, use directly
+            keyBytes = rawBytes;
+        } else {
+            // Derive a cryptographically secure 512-bit (64-byte) key using SHA-512 to satisfy RFC 7518 HS512
+            try {
+                MessageDigest digest = MessageDigest.getInstance("SHA-512");
+                keyBytes = digest.digest(rawBytes);
+            } catch (NoSuchAlgorithmException e) {
+                throw new IllegalStateException("SHA-512 algorithm not available", e);
+            }
+        }
+        
+        this.signingKey = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpiryMinutes = accessTokenExpiryMinutes;
         this.refreshTokenExpiryDays = refreshTokenExpiryDays;
     }

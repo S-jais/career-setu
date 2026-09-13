@@ -223,6 +223,22 @@ CREATE INDEX idx_security_events_user ON security_events(user_id, occurred_at DE
 CREATE INDEX idx_security_events_type ON security_events(event_type, occurred_at DESC);
 CREATE INDEX idx_security_events_severity ON security_events(severity) WHERE resolved_at IS NULL;
 
+-- ── Audit Logs ──────────────────────────────────────────────
+CREATE TABLE audit_logs (
+    id              UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    event_type      VARCHAR(50) NOT NULL,
+    user_id         UUID,
+    actor_email     VARCHAR(255),
+    ip_address      VARCHAR(50),
+    status          VARCHAR(20) NOT NULL,
+    details         VARCHAR(1000),
+    created_at      TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_audit_logs_event_type ON audit_logs(event_type);
+CREATE INDEX idx_audit_logs_actor_email ON audit_logs(actor_email);
+CREATE INDEX idx_audit_logs_created_at ON audit_logs(created_at);
+
 -- ── Updated_at trigger function ───────────────────────────────
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$

@@ -23,6 +23,7 @@ public class AuditLogService {
         this.auditLogRepository = auditLogRepository;
     }
 
+    @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void recordEvent(String eventType, UUID userId, String actorEmail, String ipAddress, String status, String details) {
         try {
